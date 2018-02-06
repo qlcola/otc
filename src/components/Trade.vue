@@ -19,7 +19,7 @@
       </el-aside>
       <el-main class="content-main shadow" v-bind:style="{ height: contentHeight + 'px' }">
         <keep-alive>
-          <component v-bind:is="currentView" v-bind:buyData="buyData" v-bind:saleData="saleData"></component> 
+          <component v-bind:is="currentView" v-bind:buyData="buyData" v-bind:saleData="saleData"></component>
         </keep-alive>
       </el-main>
     </el-container>
@@ -61,7 +61,8 @@ export default {
       const tradType = indexSplit[1] === 'Buy' ? 2 : 1;
       this.getTradeData({
         adType: tradType,
-        coinType: 1
+        coinType: 1,
+        currPage:1
       });
     }
   },
@@ -69,6 +70,7 @@ export default {
     this.getTradeData({
       adType: 2,
       coinType: 2,
+      currPage:1,
     });
   }
 }

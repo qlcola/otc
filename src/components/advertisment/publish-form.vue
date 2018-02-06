@@ -1,8 +1,8 @@
 <template>
   <div class="publish-content-wrap">
       <el-form :model="formData" status-icon :rules="rules" ref="formData" label-width="150px">
-            <el-form-item label="我想要" prop="orderType">
-                <el-radio-group v-model="formData.orderType">
+            <el-form-item label="我想要" prop="adType">
+                <el-radio-group v-model="formData.adType">
                     <el-radio label="1">在线出售</el-radio>
                     <el-radio label="2">在线购买</el-radio>
                 </el-radio-group>
@@ -41,17 +41,17 @@
                 <span class="red-txt ft18">75450.68 CNY/BTC</span>
                 <p class="primium-tip">计算公式：(Bitstamp+Bitfinex+Coinbase) /3 * 1.0000</p>
             </el-form-item>
-            <el-form-item label="卖出数量" prop="currencyPrice">
-                <el-input v-model="formData.currencyPrice" auto-complete="off"></el-input>
+            <el-form-item label="卖出数量" prop="coinAmount">
+                <el-input v-model="formData.coinAmount" auto-complete="off"></el-input>
             </el-form-item>
-            <el-form-item label="付款期限" prop="timeoutSecs">
-                <el-input v-model="formData.timeoutSecs" auto-complete="off" >
+            <el-form-item label="付款期限" prop="timeOutSec">
+                <el-input v-model="formData.timeOutSec" auto-complete="off" >
                     <template slot="append">分钟</template>
                 </el-input>
             </el-form-item>
             <el-form-item label="付款方式" prop="payType">
                 <el-checkbox-group v-model="formData.payType">
-                    <el-checkbox v-for="pay in paymethods" :label="pay.label" :key="pay.value">{{pay.label}}</el-checkbox>
+                    <el-checkbox v-for="pay in paymethods" :label="pay.label" :key="pay.value" :value="pay.value">{{pay.label}}</el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
             <el-form-item label="最小交易额" prop="minTradeAmount">
@@ -72,6 +72,7 @@
 </template>
 
 <script>
+  import axios from '@/axios';
 export default {
   props: ['isCreate', 'propFormData'],
   data () {
@@ -85,7 +86,7 @@ export default {
       };
       return {
           rules: {
-              orderType: [
+              adType: [
                 { required: true, trigger: 'change' }
               ],
               currencyType: [
@@ -118,21 +119,21 @@ export default {
           },
           formData: this.propFormData,
           currencyOptions: [{
-              value: 'BTC',
+              value: '1',
               label: 'BTC',
           }],
           coinOptions: [{
-              value: 'CNY',
+              value: '1',
               label: 'CNY',
           }],
           paymethods: [{
-              value: 'alipay',
+              value: '2',
               label: '支付宝',
           }, {
-              value: 'wechat',
+              value: '3',
               label: '微信支付',
           }, {
-              value: 'bankCard',
+              value: '1',
               label: '银行卡支付',
           }]
       }
@@ -141,7 +142,26 @@ export default {
       submitPublishForm() {
           this.$refs.formData.validate((valid) => {
             if (valid) {
-                console.log(this.formData);
+                //console.log(this.formData);
+              axios({
+                url: 'otc/otcad/create',
+                method: 'post',
+                data: this.formData,
+              }).then((response) => {
+                if(response.data.status == 1){
+                  this.$message({
+                    message: '发布广告成功',
+                    type: 'success'
+                  });
+                  this.activeName = 'getOtcAds';
+                }
+
+              }).catch(err => {
+                this.$message({
+                  message: '登录失败，请重试',
+                  type: 'error'
+                });
+              });
             } else {
               console.log('error submit!!');
               return false;

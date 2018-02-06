@@ -13,7 +13,7 @@
                     <!--<span>{{ scope.row.merchant.substring(0, 1) }}</span>-->
                   </div>
                 </div>
-                <!--<div class="merchant-name">{{ scope.row.merchant }}</div>-->
+                <div class="merchant-name">{{ scope.row.creatorNickName }}</div>
               </div>
           </template>
         </el-table-column>
@@ -77,7 +77,7 @@ export default {
       };
     },
     methods: {
-      
+
       formatPrice: (str) => formatPrice(str),
     }
 }

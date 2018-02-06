@@ -3,21 +3,19 @@ import _ from 'lodash';
 
 export const getTradeData = ({ commit }, payload) => {
     axios({
-        // url: '/otc/otcad/getOtcAds',
+        url: '/otc/otcad/getOtcAds',
         // url: '/api/sale',
-        url: '/api/buy',
+        //url: '/api/buy',
         method: 'post',
         data: payload,
     }).then((response) => {
-        // if (response.data.status === 1) {
-        //     if (payload.adType === 1) {
-        //         commit("GETSALEDATA", response.data.data);
-        //     } else if (payload.adType === 2) {
-        //         commit("GETBUYDATA", response.data.data);
-        //     }
-        // }
-        // commit("GETSALEDATA", response.data);
-        commit("GETBUYDATA", response.data);
+        if (response.data.status === 1) {
+            if (payload.adType === 1) {
+                commit("GETSALEDATA", response.data.data.data);
+            } else if (payload.adType === 2) {
+                commit("GETBUYDATA", response.data.data.data);
+            }
+        }
     });
 };
 
@@ -60,9 +58,20 @@ export const getOrderData = ({ commit }, payload) => {
         });
     });
 };
-export const getAdData = ({ commit }) => {
-    axios.get("/otc/otcad/myAd", { withCredentials: true }).then(data => {
+export const getAdData = ({ commit },payload) => {
+    axios({
+      url: '/otc/otcad/myAd',
+      method: 'post',
+      data: payload,
+    }).then(res => {
+      commit("GET_AD_DATA", {
+        data: res.data.data,
+      });
+    });
+
+
+    /*axios.get("/otc/otcad/myAd", { withCredentials: true }).then(data => {
         var res = data.data;
         commit("GET_AD_DATA", res);
-    });
+    });*/
 };

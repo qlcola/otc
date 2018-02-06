@@ -24,17 +24,17 @@ export default {
   data() {
       return {
           createFormData: {
-              orderType: '1',
+              adType: '1',
               currencyType: undefined,
               coinType: undefined,
-              isFixedPrice: true,
+              isFixedPrice: false,
               currencyPrice: undefined,
               primium: undefined,
               coinAmount: undefined,
               payType: [],
               minTradeAmount: undefined,
               maxTradeAmount: undefined,
-              timeoutSecs: undefined,
+              timeOutSec: undefined,
           }
       }
   }
@@ -47,7 +47,7 @@ export default {
         margin:  20px auto;
         background: white;
     }
-    
+
     .publish-tip {
         padding: 20px 35px;
         .tip-title {

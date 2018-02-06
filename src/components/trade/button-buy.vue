@@ -3,7 +3,7 @@
       <el-button
         size="defaut"
         type="danger"
-        class="btn-buy btn-operate" 
+        class="btn-buy btn-operate"
         @click="dialogFormVisible = true"
         >买入</el-button>
       <el-dialog :visible.sync="dialogFormVisible" width="520px">
@@ -17,13 +17,13 @@
         </div>
         <el-form :model="buyForm" label-position="top" :rules="rules" ref="buyForm" >
             <el-form-item label="单笔交易限额" >
-                <div class="limit-tip">800~870 {{coinType}}</div>
+                <div class="limit-tip">{{minTradeAmount}}~{{maxTradeAmount}} {{coinType}}</div>
             </el-form-item>
-            <el-form-item :label="currencyLabel" prop="currencyAmount">
-                <el-input v-model="buyForm.currencyAmount" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item :label="coinLabel" :label-width="formLabelWidth" prop="coinAmount">
+            <el-form-item :label="currencyLabel" prop="coinAmount">
                 <el-input v-model="buyForm.coinAmount" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item :label="coinLabel" :label-width="formLabelWidth" prop="currencyAmount">
+                <el-input v-model="buyForm.currencyAmount" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="资金密码" :label-width="formLabelWidth" prop="tradePassword">
                 <el-input type="password" v-model="buyForm.tradePassword" auto-complete="off"></el-input>
@@ -33,7 +33,7 @@
             <el-button @click="dialogFormVisible = false">取 消</el-button>
             <el-button type="primary" @click="submitForm">确 定</el-button>
         </div>
-        </el-dialog>  
+        </el-dialog>
   </div>
 </template>
 
@@ -57,7 +57,7 @@
         padding-bottom: 0;
         line-height: 30px;
     }
-    .trade-price { 
+    .trade-price {
         background: #eee;
         border-radius: 5px;
         text-align: center;
@@ -81,6 +81,7 @@
     }
 </style>
 <script>
+  import axios from '@/axios';
 export default {
   props: ['price', 'id', 'currencyType', 'coinType'],
   data() {
@@ -95,7 +96,7 @@ export default {
           buyForm: {
             currencyAmount: undefined,
             coinAmount: undefined,
-            orderId: this.id,
+            adId: this.id,
           },
           formLabelWidth: '120px',
           rules: {
@@ -106,7 +107,7 @@ export default {
       };
   },
   computed: {
-    currencyLabel: function() { 
+    currencyLabel: function() {
         return `数量${this.currencyType}`;
     },
     coinLabel: function() {
@@ -117,13 +118,19 @@ export default {
     submitForm: function() {
         this.$refs.buyForm.validate((valid) => {
           if (valid) {
-            // axios({
-            //   // url: 'otc/user/login',
-            //   method: 'post',
-            //   data: this.userForm,
-            // }).then((response) => {
-
-            // });
+             axios({
+               url: 'otc/otcorder/createOrder',
+               method: 'post',
+               data: this.buyForm,
+             }).then((response) => {
+               if(response.data.status == 1){
+                 this.$message({
+                   message: '创建订单成功',
+                   type: 'success'
+                 });
+                 this.activeName = 'getOtcAds';
+               }
+             });
             console.log(this.buyForm);
           } else {
             return false;

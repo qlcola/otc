@@ -19,7 +19,7 @@
     </el-aside>
     <el-main class="content-main shadow" v-bind:style="{ height: contentHeight + 'px' }">
         <keep-alive>
-        <component v-bind:is="currentView" v-bind:orderData="orderData" v-bind:adData="adData"></component> 
+        <component v-bind:is="currentView" v-bind:orderData="orderData" v-bind:adData="adData"></component>
         </keep-alive>
     </el-main>
     </el-container>
@@ -58,17 +58,21 @@ export default {
     handleSelect: function(index) {
       this.currentView = index;
       if (index === 'Order') {
-        // this.getOrderData({
-        //   status: 0,
-        // });
+         this.getOrderData({
+           status: 0,
+           currPage:1
+         });
       } else {
-        this.getAdData();
+        this.getAdData({
+          currPage:1
+        });
       }
     }
   },
   created() {
     this.getOrderData({
-      status: 0
+      status: 0,
+      currPage:1
     });
   }
 }
