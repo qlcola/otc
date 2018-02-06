@@ -1,0 +1,111 @@
+{
+  "posts": [
+    { "id": 1, "title": "json-server", "author": "typicode" }
+  ],
+  "comments": [
+    { "id": 1, "body": "some comment", "postId": 1 }
+  ],
+  "profile": { "name": "typicode" },
+  "buy": [{
+          "merchant": "商家A",
+          "orderId": "099867865",
+          "createId": "0001",
+          "createTime": "900038272",
+          "status": "1",
+          "coinType": "CNY",
+          "currencyType": "BTC",
+          "isFixedPrice": true,
+          "currencyPrice": "0.5",
+          "premiun": "5",
+          "coinAmount": "81900.5",
+          "timeoutSecs": "0",
+          "payType": ["bankCard", "alipay", "wechat"],
+          "minTradeAmount": "1000",
+          "maxTradeAmout": "9999",
+          "adId": "00008",
+          "referenceNumber": "887689"
+        }],
+  "sale": [{
+          "adType": 1,
+          "merchant": "商家A",
+          "orderId": "099867865",
+          "createId": "0001",
+          "createTime": "900038272",
+          "status": "1",
+          "coinType": "CNY",
+          "currencyType": "BTC",
+          "isFixedPrice": true,
+          "currencyPrice": "0.5",
+          "premiun": "5",
+          "coinAmount": "81900.5",
+          "timeoutSecs": "0",
+          "payType": ["bankCard", "alipay", "wechat"],
+          "minTradeAmount": "1000",
+          "maxTradeAmout": "9999",
+          "adId": "00008",
+          "referenceNumber": "887689"
+        }],
+  "user": {
+    "uid": "0001",
+    "nick": "Tom"
+  },
+  "login": {
+    "code": 1,
+    "session": "xyuuu00001"
+  },
+  "register": {
+    "code": 1,
+    "session": "xyuuu00001"
+  },
+  "order": [{
+    "orderId": "099867865",
+    "createId": "0001",
+    "createTime": "900038272",
+    "status": "1",
+    "coinType": "CNY",
+    "currencyType": "BTC",
+    "isFixedPrice": true,
+    "currencyPrice": "9800",
+    "premiun": "5",
+    "coinAmount": "6",
+    "timeoutSecs": "0",
+    "payType": "alipay",
+    "minTradeAmount": "100",
+    "maxTradeAmout": "999",
+    "adId": "00008",
+    "referenceNumber": "887689"
+  }, {
+    "orderId": "099867867",
+    "createId": "0001",
+    "createTime": "900038272",
+    "status": "2",
+    "coinType": "CNY",
+    "currencyType": "BTC",
+    "isFixedPrice": true,
+    "currencyPrice": "50",
+    "premiun": "5",
+    "coinAmount": "5",
+    "timeoutSecs": "0",
+    "payType": "alipay",
+    "minTradeAmount": "100",
+    "maxTradeAmout": "999",
+    "adId": "00008",
+    "referenceNumber": "887692"
+  }],
+  "ad": [{
+    "orderId":  "广告ID",
+    "creatorId":  "创建者ID",
+    "createTime":  "998023241",
+    "status":  "0",
+    "coinType":  "CNY",
+    "currencyType": "BTC",
+    "isFixedPrice": true,
+    "currencyPrice": "4",
+    "premium": "3",
+    "coinAmount": "9",
+    "timeoutSecs": "99999",
+    "payType": "wechat",
+    "minTradeAmount": "50",
+    "maxTradeAmount": "100"
+  }]
+}
