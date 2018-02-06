@@ -10,7 +10,7 @@
               <div class="merchant-block">
                 <div class="avatar-wrap">
                   <div class="avatar">
-                    <span><!--{{ scope.row.merchant.substring(0, 1) }}--></span>
+                    <span>{{ scope.row.creatorNickName.substring(0, 1) }}</span>
                   </div>
                 </div>
                 <div class="merchant-name">{{ scope.row.creatorNickName }}</div>
@@ -28,9 +28,9 @@
         label="支付方式"
         width="180">
           <template slot-scope="scope">
-              <!--<i v-if="scope.row.payType.indexOf('bankCard') !== -1" class="payicon icon-bankCard"></i>
-              <i v-if="scope.row.payType.indexOf('alipay') !== -1" class="payicon icon-alipay"></i>
-              <i v-if="scope.row.payType.indexOf('wechat') !== -1" class="payicon icon-wechat"></i>-->
+              <i v-if="scope.row.payType.indexOf('1') !== -1" class="payicon icon-bankCard"></i>
+              <i v-if="scope.row.payType.indexOf('2') !== -1" class="payicon icon-alipay"></i>
+              <i v-if="scope.row.payType.indexOf('3') !== -1" class="payicon icon-wechat"></i>
           </template>
         </el-table-column>
         <el-table-column
@@ -55,8 +55,8 @@
                 :id="scope.row.adId"
                 :currencyType="scope.row.currencyType"
                 :coinType="scope.row.coinType"
-                :min="scope.row.minTradeAmount"
-                :max="scope.row.maxTradeAmount"
+                :minTradeAmount="scope.row.minTradeAmount"
+                :maxTradeAmount="scope.row.maxTradeAmount"
               />
           </template>
         </el-table-column>

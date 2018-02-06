@@ -81,9 +81,9 @@
     }
 </style>
 <script>
-  import axios from '@/axios';
+import axios from '@/axios';
 export default {
-  props: ['price', 'id', 'currencyType', 'coinType'],
+  props: ['price', 'id', 'currencyType', 'coinType', 'maxTradeAmount', 'minTradeAmount'],
   data() {
       const normalValidate = (rule, value, callback) => {
         if (!/\d+/.test(value)) {

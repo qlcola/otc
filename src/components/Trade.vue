@@ -52,7 +52,6 @@ export default {
   },
   methods: {
     ...mapActions([
-        'getBaseData',
         'getTradeData',
     ]),
     handleSelect: function(index) {

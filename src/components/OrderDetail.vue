@@ -93,6 +93,7 @@
 
 <script>
 import Navigator from './Navigator'
+import axios from '@/axios';
 
 export default {
   components: {
@@ -100,10 +101,44 @@ export default {
   },
   methods: {
       confirmPay: function() {
-
+        axios({
+            url: 'otc/otcorder/setorderpayed',
+            method: 'post',
+            data: this.orderId,
+        }).then((response) => {
+            if(response.data.status == 1){
+                this.$message({
+                    message: '标记成功',
+                    type: 'success'
+                });
+            }
+        });
+      },
+      confirmFinish: function() {
+        axios({
+            url: 'otc/otcorder/setorderfinish',
+            method: 'get',
+        }).then((response) => {
+            if(response.data.status == 1){
+                this.$message({
+                    message: '订单已完成',
+                    type: 'success'
+                });
+            }
+        });
       },
       cancelTrad: function() {
-
+        axios({
+            url: 'otc/otcorder/cancelorder',
+            method: 'get',
+        }).then((response) => {
+            if(response.data.status == 1){
+                this.$message({
+                    message: '取消成功',
+                    type: 'success'
+                });
+            }
+        });
       }
   }
 }
