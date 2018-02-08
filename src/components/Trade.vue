@@ -52,13 +52,12 @@ export default {
   },
   methods: {
     ...mapActions([
-        'getBaseData',
         'getTradeData',
     ]),
     handleSelect: function(index) {
       const indexSplit = index.split('_');
       this.currentView = indexSplit[1];
-      const tradType = indexSplit[1] === 'Buy' ? 2 : 1;
+      const tradType = indexSplit[1] === 'Buy' ? 1 : 2;
       this.getTradeData({
         adType: tradType,
         coinType: 1,

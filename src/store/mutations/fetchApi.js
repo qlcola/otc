@@ -26,8 +26,8 @@ export const GET_ORDER_DATA = (state, payload) => {
     state.orderData[`st-${payload.status}`] = payload.data;
 };
 
-export const GET_AD_DATA = (state, data) => {
-    state.adData = data;
+export const GET_AD_DATA = (state, payload) => {
+    state.adData = payload;
 };
 
 export const GET_FINANCIAL_DATA = (state, payload) => {
