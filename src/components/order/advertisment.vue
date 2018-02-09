@@ -5,7 +5,7 @@
     style="width: 100%">
     <el-table-column prop="adId" label="订单号">
       <template slot-scope="scope">
-        <router-link :to="{ name: 'orderDetail', params: { id: scope.row.orderId, }}" class="order-link">{{scope.row.orderId}}</router-link>
+        {{scope.row.adId}}
       </template>
     </el-table-column>
     <el-table-column prop="createTime" label="创建时间">
