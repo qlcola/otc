@@ -3,7 +3,7 @@
       <el-button
         size="defaut"
         type="success"
-        class="btn-buy btn-operate" 
+        class="btn-buy btn-operate"
         @click="dialogFormVisible = true"
         >卖出</el-button>
       <el-dialog :visible.sync="dialogFormVisible" width="520px">
@@ -12,18 +12,18 @@
             <span class="sub-title">请在45秒内确定，确保以当前价格下单</span>
         </div>
         <div class="trade-price">
-            <div class="price-tip">交易价格({{coinType}}/{{currencyType===1?'BTC':'CNY'}})</div>
+            <div class="price-tip">交易价格({{coinType}}/{{currencyType===1?'CNY':'CNY'}})</div>
             <div class="price-num">{{price}}</div>
         </div>
         <el-form :model="saleForm" label-position="top" :rules="rules" ref="saleForm">
             <el-form-item label="单笔交易限额" >
                 <div class="limit-tip">{{minTradeAmount}}~{{maxTradeAmount}}</div>
             </el-form-item>
-            <el-form-item :label="currencyLabel" >
-                <el-input v-model="saleForm.currencyAmount" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item :label="coinLabel" :label-width="formLabelWidth">
+            <el-form-item :label="coinLabel" prop="coinAmount">
                 <el-input v-model="saleForm.coinAmount" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item :label="currencyLabel" :label-width="formLabelWidth" prop="currencyAmount">
+                <el-input v-model="saleForm.currencyAmount" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="资金密码" :label-width="formLabelWidth" prop="tradePassword">
                 <el-input type="password" v-model="saleForm.tradePassword" auto-complete="off"></el-input>
@@ -33,7 +33,7 @@
             <el-button @click="dialogFormVisible = false">取 消</el-button>
             <el-button type="primary" @click="submitForm">确 定</el-button>
         </div>
-        </el-dialog>  
+        </el-dialog>
   </div>
 </template>
 
@@ -57,7 +57,7 @@
         padding-bottom: 0;
         line-height: 30px;
     }
-    .trade-price { 
+    .trade-price {
         background: #eee;
         border-radius: 5px;
         text-align: center;
@@ -108,10 +108,10 @@ export default {
       };
   },
   computed: {
-    currencyLabel: function() { 
+    coinLabel: function() {
         return '数量 BTC';
     },
-    coinLabel: function() {
+    currencyLabel: function() {
         return '金额 CNY';
     },
   },

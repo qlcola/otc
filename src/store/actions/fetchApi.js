@@ -8,9 +8,9 @@ export const getTradeData = ({ commit }, payload) => {
         data: payload,
     }).then((response) => {
         if (response.data.status === 1) {
-            if (payload.adType === 1) {
+            if (payload.adType === 2) {
                 commit("GETSALEDATA", response.data.data.data);
-            } else if (payload.adType === 2) {
+            } else if (payload.adType === 1) {
                 commit("GETBUYDATA", response.data.data.data);
             }
         }

@@ -73,6 +73,7 @@
                             <div>
                                 <el-button class="publish-btn" type="primary" @click="confirmPay()">我已付款</el-button>
                                 <el-button class="publish-btn" @click="cancelTrad()">取消交易</el-button>
+                                <el-button class="publish-btn" @click="confirmFinish()">确认放行</el-button>
                             </div>
                         </div>
                     </div>
@@ -102,9 +103,9 @@ export default {
   methods: {
       confirmPay: function() {
         axios({
-            url: 'otc/otcorder/setorderpayed',
+            url: 'otc/otcorder/setOrderPayed',
             method: 'post',
-            data: this.orderId,
+            data: {"orderId":this.$route.params.id},
         }).then((response) => {
             if(response.data.status == 1){
                 this.$message({
@@ -116,8 +117,9 @@ export default {
       },
       confirmFinish: function() {
         axios({
-            url: 'otc/otcorder/setorderfinish',
-            method: 'get',
+            url: 'otc/otcorder/setOrderFinish',
+            method: 'post',
+            data: {"orderId":this.$route.params.id},
         }).then((response) => {
             if(response.data.status == 1){
                 this.$message({
@@ -129,8 +131,9 @@ export default {
       },
       cancelTrad: function() {
         axios({
-            url: 'otc/otcorder/cancelorder',
-            method: 'get',
+            url: 'otc/otcorder/cancelOrder',
+            method: 'post',
+            data: {"orderId":this.$route.params.id},
         }).then((response) => {
             if(response.data.status == 1){
                 this.$message({

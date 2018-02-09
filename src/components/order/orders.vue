@@ -13,7 +13,7 @@
       style="width: 100%">
       <el-table-column prop="orderId" label="订单号">
         <template slot-scope="scope">
-          <router-link :to="{ name: 'orderDetail', params: { id: scope.row.adId, }}" class="order-link">{{scope.row.adId}}</router-link>
+          <router-link :to="{ name: 'orderDetail', params: { id: scope.row.orderId, }}" class="order-link">{{scope.row.orderId}}</router-link>
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间">
@@ -29,22 +29,25 @@
       <el-table-column prop="address" label="类型">
 
       </el-table-column>
-      <el-table-column
-        prop=""
-        label="交易对象">
+      <el-table-column prop="adCreatorNick" label="交易对象">
+        <template slot-scope="scope">
+          <span>{{scope.row.adCreatorNick}}</span>
+        </template>
       </el-table-column>
       <el-table-column prop="currencyPrice" label="交易价格">
       <template slot-scope="scope">
-        <span>{{scope.row.currencyPrice}} {{ scope.row.coinType === 1 ? 'BTC' : 'CNY'}}</span>
-      </template>  
+        <span>{{scope.row.currencyPrice}} {{ scope.row.currencyType === 1 ? 'CNY' : 'CNY'}}</span>
+      </template>
       </el-table-column>
-      <el-table-column
-      prop="currencyAmount"
-      label="数量">
+      <el-table-column prop="coinAmount" label="数量">
+        <template slot-scope="scope">
+          <span>{{scope.row.coinAmount}}</span>
+        </template>
       </el-table-column>
-      <el-table-column
-      prop="currencyPrice"
-      label="金额">
+      <el-table-column prop="currencyAmount" label="金额">
+        <template slot-scope="scope">
+          <span>{{scope.row.currencyAmount}}</span>
+        </template>
       </el-table-column>
       <el-table-column
       prop="serviceCharge"

@@ -19,10 +19,10 @@
             <el-form-item label="单笔交易限额" >
                 <div class="limit-tip">{{minTradeAmount}}~{{maxTradeAmount}} {{coinType}}</div>
             </el-form-item>
-            <el-form-item :label="currencyLabel" prop="coinAmount">
-                <el-input v-model="buyForm.coinAmount" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item :label="coinLabel" :label-width="formLabelWidth" prop="currencyAmount">
+          <el-form-item :label="coinLabel" :label-width="formLabelWidth" prop="coinAmount">
+            <el-input v-model="buyForm.coinAmount" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item :label="currencyLabel" prop="currencyAmount">
                 <el-input v-model="buyForm.currencyAmount" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="资金密码" :label-width="formLabelWidth" prop="tradePassword">
@@ -107,10 +107,10 @@ export default {
       };
   },
   computed: {
-    currencyLabel: function() {
+    coinLabel: function() {
         return `数量${this.currencyType}`;
     },
-    coinLabel: function() {
+    currencyLabel: function() {
         return `金额${this.coinType}`;
     },
   },

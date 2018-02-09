@@ -37,22 +37,22 @@
         label="数量"
         width="120">
           <template slot-scope="scope">
-              <span>{{ scope.row.currencyPrice }} {{ scope.row.currencyType===1? 'BTC':'CNY'}}</span>
+              <span>{{ scope.row.coinAmount }}</span>
           </template>
         </el-table-column>
         <el-table-column
         label="价格"
         width="180">
           <template slot-scope="scope">
-              <div class="main-price">{{ formatPrice(scope.row.coinAmount) }} {{ scope.row.coinType }}</div>
+              <div class="main-price">{{ formatPrice(scope.row.currencyPrice) }} {{ scope.row.coinType }}</div>
               <div class="sub-price">{{ formatPrice(scope.row.minTradeAmount) }}-{{  formatPrice(scope.row.maxTradeAmount) }} CNY</div>
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
               <ButtonSale
-                :price="scope.row.coinAmount"
-                :id="scope.row.orderId"
+                :price="scope.row.currencyPrice"
+                :id="scope.row.adId"
                 :currencyType="scope.row.currencyType"
                 :coinType="scope.row.coinType"
                 :minTradeAmount="scope.row.minTradeAmount"
