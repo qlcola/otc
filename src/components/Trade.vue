@@ -67,8 +67,8 @@ export default {
   },
   created() {
     this.getTradeData({
-      adType: 2,
-      coinType: 2,
+      adType: 1,
+      coinType: 1,
       currPage:1,
     });
   }

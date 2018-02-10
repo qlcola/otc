@@ -1,7 +1,7 @@
 <template>
   <div>
       <Navigator />
-      <div class="container">
+      <div class="container white">
           <div class="financial-title">
               <span>法币交易账户</span>
               <span>折合总资产：</span>
@@ -11,9 +11,10 @@
              :data="financialData"
              stripe
              style="width: 100%">
-                <el-table-column
-                prop="coinType"
-                label="币种">
+                <el-table-column prop="coinType" label="币种">
+                    <template slot-scope="scope">
+                        <span>{{ scope.row.coinType === 1 ? 'BTC' : 'CNY'}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                 prop="amount"
@@ -54,6 +55,7 @@
 
 <script>
 import Navigator from './Navigator'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -61,23 +63,27 @@ export default {
   },
   data() {
       return {
-        financialData: [{
-            coinType: 'BTC',
-            amount: '100',
-            freezonAmount: '20',
-        }],
       }
   },
+  computed: {
+      ...mapGetters(['financialData']),
+  },
   methods: {
+    ...mapActions([
+        'getMyFinancial',
+    ]),
       charge() {
 
       }
-  }
+  },
+  created() {
+    this.getMyFinancial();
+  },
 }
 </script>
 
 <style lang='less'>
-    .container {
+    .container.white {
         width: 1200px;
         margin:  20px auto;
         background: white;

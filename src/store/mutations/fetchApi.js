@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 export const FETCH_SUCCESS = (state, data) => {
     state.pageData = data;
 };
@@ -23,7 +25,7 @@ export const GET_USER_INFO = (state, payload) => {
 };
 
 export const GET_ORDER_DATA = (state, payload) => {
-    state.orderData[`st-${payload.status}`] = payload.data;
+    Vue.set(state.orderData, `st-${payload.status}`, payload.data);
 };
 
 export const GET_AD_DATA = (state, payload) => {

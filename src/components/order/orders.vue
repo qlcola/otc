@@ -78,7 +78,8 @@ export default {
       handleClick: function({ name }) {
         this.activeName = name;
         this.getOrderData({
-          status: name
+          status: name,
+          currPage: 1
         }).then().catch(function() {
           console.log('catch');
         });

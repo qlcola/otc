@@ -46,3 +46,6 @@ export const orderData = (state) => {
 export const adData = (state) => {
     return state.adData;
 };
+export const financialData = (state) => {
+    return state.financialData;
+};

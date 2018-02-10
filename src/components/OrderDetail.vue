@@ -9,7 +9,9 @@
             </el-breadcrumb>
         </div>
         <div class="order-title">
-            买入 BTC 订单号: {{ $route.params.id }}
+            <span class="order-title-type">买入 BTC</span>
+            <span class="order-title-id">订单号: {{ $route.params.id }}</span>
+            <span class="order-title-status">等待对方支付</span>
         </div>
         <div class="pay-detail">
             <el-row>
@@ -17,7 +19,7 @@
                     <div class="grid-content">
                         <div class="content-block">
                             <div class="pay-title">交易金额</div>
-                            <div class="pay-price">100 CNY</div>
+                            <div class="pay-price price-bold">100 CNY</div>
                         </div>
                         <div class="content-block">
                             <div class="pay-title">数量</div>
@@ -156,6 +158,7 @@ export default {
     background: white;
     padding: 15px;
     margin-bottom: 20px;
+    position: relative;
 }
 .pay-detail {
     background: white;
@@ -199,5 +202,23 @@ export default {
         padding: 0;
         list-style: none;
     }
+}
+.price-bold {
+    font-size: 18px;
+    font-weight: bold;
+    color: #409EFF;
+}
+.pay-title {
+    color: #999;
+    padding-bottom: 2px;
+}
+.order-title-id {
+    font-size: 13px;
+    margin-left: 10px;
+}
+.order-title-status {
+    font-size: 14px;
+    float: right;
+    color: #5cab35;
 }
 </style>
