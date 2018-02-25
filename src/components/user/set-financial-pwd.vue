@@ -10,18 +10,18 @@
         <div slot="title">
             <span class="main-title">重置资金密码</span>
         </div>
-        <el-form :model="pwdForm" label-position="top" :rules="rules" ref="buypwdFormForm" >
-            <el-form-item label="新资金密码" :label-width="formLabelWidth" prop="tradePassword">
+        <el-form :model="pwdForm" label-position="top" :rules="rules" ref="pwdForm" >
+            <el-form-item label="新资金密码" :label-width="formLabelWidth">
                 <el-input type="password" v-model="pwdForm.psd" auto-complete="off"></el-input>
             </el-form-item>
-            <el-form-item label="短信验证码" :label-width="formLabelWidth" prop="tradePassword">
+            <el-form-item label="短信验证码" :label-width="formLabelWidth">
                <el-input v-model="pwdForm.mobileCode" class="input-with-select">
-                    <el-button slot="append">发送验证码</el-button>
+                    <el-button slot="append" @click="getCode('mobile')">发送验证码</el-button>
                 </el-input>
             </el-form-item>
-            <el-form-item label="邮箱验证码" :label-width="formLabelWidth" prop="tradePassword">
+            <el-form-item label="邮箱验证码" :label-width="formLabelWidth">
                <el-input v-model="pwdForm.emailCode" class="input-with-select">
-                    <el-button slot="append" @click="getCode">发送验证码</el-button>
+                    <el-button slot="append" @click="getCode('email')">发送验证码</el-button>
                 </el-input>
             </el-form-item>
         </el-form>
@@ -70,12 +70,12 @@ export default {
             this.dialogFormVisible = false;
         });
     },
-    getCode() {
+    getCode(type) {
      axios({
         url: 'otc/user/verCode',
         method: 'post',
         data: {
-            account: this.userEmail,
+            account: type === 'email' ? this.userEmail : this.userMobile,
             scene: 105,
         },
      }).then((response) => {

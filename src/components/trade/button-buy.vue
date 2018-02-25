@@ -20,10 +20,10 @@
                 <div class="limit-tip">{{minTradeAmount}}~{{maxTradeAmount}} {{coinType}}</div>
             </el-form-item>
           <el-form-item :label="coinLabel" :label-width="formLabelWidth" prop="coinAmount">
-            <el-input v-model="buyForm.coinAmount" auto-complete="off"></el-input>
+            <el-input v-model.number="buyForm.coinAmount" type="number" auto-complete="off" @change="autoCalculate('amout')"></el-input>
           </el-form-item>
           <el-form-item :label="currencyLabel" prop="currencyAmount">
-                <el-input v-model="buyForm.currencyAmount" auto-complete="off"></el-input>
+                <el-input v-model.number="buyForm.currencyAmount" type="number" auto-complete="off" @change="autoCalculate('currency')"></el-input>
             </el-form-item>
             <el-form-item label="资金密码" :label-width="formLabelWidth" prop="tradePassword">
                 <el-input type="password" v-model="buyForm.tradePassword" auto-complete="off"></el-input>
@@ -82,6 +82,8 @@
 </style>
 <script>
 import axios from '@/axios';
+import _ from 'lodash';
+
 export default {
   props: ['price', 'id', 'currencyType', 'coinType', 'maxTradeAmount', 'minTradeAmount'],
   data() {
@@ -108,10 +110,10 @@ export default {
   },
   computed: {
     coinLabel: function() {
-        return `数量${this.currencyType}`;
+        return '数量 BTC';
     },
     currencyLabel: function() {
-        return `金额${this.coinType}`;
+        return '金额 CNY';
     },
   },
   methods: {
@@ -136,6 +138,13 @@ export default {
             return false;
           }
         });
+    },
+    autoCalculate: function(type) {
+        if (type === 'currency') {
+            this.buyForm.coinAmount = this.buyForm.currencyAmount / this.price;
+        } else {
+            this.buyForm.currencyAmount = this.buyForm.coinAmount * this.price
+        }
     },
   }
 }

@@ -51,7 +51,7 @@
             </el-form-item>
             <el-form-item label="付款方式" prop="payType">
                 <el-checkbox-group v-model="formData.payType">
-                    <el-checkbox v-for="pay in paymethods" :label="pay.label" :key="pay.value" :value="pay.value">{{pay.label}}</el-checkbox>
+                    <el-checkbox v-for="pay in paymethods" :label="pay.value" :key="pay.value" :value="pay.value">{{pay.label}}</el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
             <el-form-item label="最小交易额" prop="minTradeAmount">
@@ -142,7 +142,7 @@ export default {
       submitPublishForm() {
           this.$refs.formData.validate((valid) => {
             if (valid) {
-                //console.log(this.formData);
+                // console.log(this.formData);
               axios({
                 url: 'otc/otcad/create',
                 method: 'post',

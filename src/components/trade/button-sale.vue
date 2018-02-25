@@ -20,10 +20,10 @@
                 <div class="limit-tip">{{minTradeAmount}}~{{maxTradeAmount}}</div>
             </el-form-item>
             <el-form-item :label="coinLabel" prop="coinAmount">
-                <el-input v-model="saleForm.coinAmount" auto-complete="off"></el-input>
+                <el-input v-model.number="saleForm.coinAmount" type="number" auto-complete="off" @change="autoCalculate('amout')"></el-input>
             </el-form-item>
             <el-form-item :label="currencyLabel" :label-width="formLabelWidth" prop="currencyAmount">
-                <el-input v-model="saleForm.currencyAmount" auto-complete="off"></el-input>
+                <el-input v-model.number="saleForm.currencyAmount" type="number" auto-complete="off" @change="autoCalculate('currency')"></el-input>
             </el-form-item>
             <el-form-item label="资金密码" :label-width="formLabelWidth" prop="tradePassword">
                 <el-input type="password" v-model="saleForm.tradePassword" auto-complete="off"></el-input>
@@ -139,7 +139,14 @@ export default {
             return false;
           }
         });
-    }
+    },
+    autoCalculate: function(type) {
+        if (type === 'currency') {
+            this.saleForm.coinAmount = this.saleForm.currencyAmount / this.price;
+        } else {
+            this.saleForm.currencyAmount = this.saleForm.coinAmount * this.price
+        }
+    },
   },
 }
 </script>

@@ -35,7 +35,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item prop="financialPass">
-                        <el-input v-model="bankForm.financialPass">
+                        <el-input type="password" v-model="bankForm.financialPass">
                             <template slot="prepend">资金密码</template>
                         </el-input>
                     </el-form-item>
@@ -49,23 +49,19 @@
             <div slot="title" class="bind-block">
                 <span class="payicon-big big-alipay"></span>
                 <span class="bind-title">支付宝账号</span>
-                <span class="bind-info">个人支付宝账户信息未绑定</span>
+                <span class="bind-info" v-if="bindedAlipay">{{alipayInfo.aliAccount}}</span>
+                <span class="bind-info" v-else>个人支付宝账户信息未绑定</span>
             </div>
             <div>
                 <el-form :model="alipayForm" :rules="alipayFormRules" ref="alipayForm" class="bankForm" label-width="100px">
-                    <el-form-item prop="surname">
-                        <el-input v-model="alipayForm.surname">
-                            <template slot="prepend">姓名</template>
-                        </el-input>
-                    </el-form-item>
                     <el-form-item prop="aliAccount">
-                        <el-input v-model="alipayForm.aliAccount">
+                        <el-input v-model="alipayForm.account">
                             <template slot="prepend">支付宝号</template>
                         </el-input>
                     </el-form-item>
                     <el-form-item prop="financialPass">
-                        <el-input v-model="alipayForm.financialPass">
-                            <template slot="prepend">资金密码</template>
+                        <el-input v-model="alipayForm.capitalPassword">
+                            <template type="password" slot="prepend">资金密码</template>
                         </el-input>
                     </el-form-item>
                     <el-form-item>
@@ -78,22 +74,18 @@
             <div slot="title" class="bind-block last">
                 <span class="payicon-big big-wechat"></span>
                 <span class="bind-title">微信账号</span>
-                <span class="bind-info">个人微信账户信息未绑定</span>
+                <span class="bind-info" v-if="bindedWechat">{{wechatInfo.weixinAccount}}</span>
+                <span class="bind-info" v-else>个人微信账户信息未绑定</span>
             </div>
             <div>
                 <el-form :model="wechatForm" :rules="wechatFormRules" ref="wechatForm" class="bankForm" label-width="100px">
-                    <el-form-item prop="surname">
-                        <el-input v-model="wechatForm.surname">
-                            <template slot="prepend">姓名</template>
-                        </el-input>
-                    </el-form-item>
                     <el-form-item prop="weixinAccount">
-                        <el-input v-model="wechatForm.weixinAccount">
+                        <el-input v-model="wechatForm.account">
                             <template slot="prepend">微信账号</template>
                         </el-input>
                     </el-form-item>
                     <el-form-item prop="financialPass">
-                        <el-input v-model="wechatForm.financialPass">
+                        <el-input type="password" v-model="wechatForm.capitalPassword">
                             <template slot="prepend">资金密码</template>
                         </el-input>
                     </el-form-item>
@@ -109,6 +101,9 @@
 
 <script>
 import _ from 'lodash';
+import axios from '@/axios';
+import { mapActions } from 'vuex'
+
 export default {
   props: ['bank', 'alipay', 'wechat'],
   data() {
@@ -120,9 +115,18 @@ export default {
           callback();
       };
       return {
-          bankForm: this.bank,
-          alipayForm: this.alipay,
-          wechatForm: this.wechat,
+          bankInfo: this.bank,
+          alipayInfo: this.alipay,
+          wechatInfo: this.wechat,
+          bankForm: {
+
+          },
+          alipayForm: {
+            account: !_.isEmpty(this.alipay) ? this.alipay.aliAccount : undefined,
+          },
+          wechatForm: {
+            account: !_.isEmpty(this.wechat) ? this.wechat.weixinAccount : undefined,
+          },
           banks: [{
               label: '中国工商银行',
               value: 'bank1',
@@ -212,36 +216,60 @@ export default {
               value: '29',
           }],
           bankFormRules: {
-            surname: { required: true, validator: normalValidate, trigger: 'change'},
             bankBranch: { required: true, validator: normalValidate, trigger: 'change'},
             bankOpen: { required: true, validator: normalValidate, trigger: 'change'},
             bankCardId: { required: true, validator: normalValidate, trigger: 'change'},
             financialPass: { required: true, validator: normalValidate, trigger: 'change'},
           },
           alipayFormRules: {
-            surname: { required: true, validator: normalValidate, trigger: 'change'},
-            financialPass: { required: true, validator: normalValidate, trigger: 'change'},
-            aliAccount: { required: true, validator: normalValidate, trigger: 'change'},
+            capitalPassword: { required: true, validator: normalValidate, trigger: 'change'},
+            account: { required: true, validator: normalValidate, trigger: 'change'},
           },
           wechatFormRules: {
-            surname: { required: true, validator: normalValidate, trigger: 'change'},
-            financialPass: { required: true, validator: normalValidate, trigger: 'change'},
-            weixinAccount: { required: true, validator: normalValidate, trigger: 'change'},
+            capitalPassword: { required: true, validator: normalValidate, trigger: 'change'},
+            account: { required: true, validator: normalValidate, trigger: 'change'},
           },
       };
   },
+  computed: {
+      bindedBank: function() {
+        return !_.isEmpty(this.bankInfo);
+      },
+      bindedAlipay: function() {
+        return !_.isEmpty(this.alipayInfo);
+      },
+      bindedWechat: function() {
+        return !_.isEmpty(this.wechatInfo);
+      },
+  },
   methods: {
+      ...mapActions([
+        'getUserInfo',
+      ]),
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            // axios({
-            //   // url: 'otc/user/login',
-            //   method: 'post',
-            //   data: this.userForm,
-            // }).then((response) => {
-
-            // });
-            console.log(this[formName]);
+            let url;
+            if (formName === 'alipayForm') {
+                url = '/otc/user/bindAliPay';
+            } else if (formName === 'wechatForm') {
+                url = '/otc/user/bindWeiXinPay';
+            } else {
+                url = '/otc/user/bindBankCard';
+            }
+            axios({
+              url,
+              method: 'post',
+              data: this[formName],
+            }).then((response) => {
+                if (response.data.status == 1) {
+                    this.$message({
+                        message: '绑定成功',
+                        type: 'success'
+                    });
+                    this.getUserInfo();
+                }
+            });
           } else {
             return false;
           }

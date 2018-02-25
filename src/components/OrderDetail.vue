@@ -9,9 +9,14 @@
             </el-breadcrumb>
         </div>
         <div class="order-title">
-            <span class="order-title-type">买入 BTC</span>
+            <span class="order-title-type" v-if="detailData.orderType===11">买入 BTC</span>
+            <span class="order-title-type" v-if="detailData.orderType===22">卖出 BTC</span>
             <span class="order-title-id">订单号: {{ $route.params.id }}</span>
-            <span class="order-title-status">等待对方支付</span>
+            <span class="order-title-status" v-if="detailData.status===0">等待支付</span>
+            <span class="order-title-status" v-if="detailData.status===1">已付款</span>
+            <span class="order-title-status" v-if="detailData.status===2">已完成</span>
+            <span class="order-title-status" v-if="detailData.status===3">已取消</span>
+            <span class="order-title-status" v-if="detailData.status===4">申诉中</span>
         </div>
         <div class="pay-detail">
             <el-row>
@@ -19,15 +24,15 @@
                     <div class="grid-content">
                         <div class="content-block">
                             <div class="pay-title">交易金额</div>
-                            <div class="pay-price price-bold">100 CNY</div>
+                            <div class="pay-price price-bold">{{detailData.currencyPrice}} CNY</div>
                         </div>
                         <div class="content-block">
                             <div class="pay-title">数量</div>
-                            <div class="pay-price">0.00123 BTC</div>
+                            <div class="pay-price">{{detailData.coinAmount}} BTC</div>
                         </div>
                         <div class="content-block">
                             <div class="pay-title">价格</div>
-                            <div class="pay-price">81887 CNY／BTC</div>
+                            <div class="pay-price">{{detailData.currencyPrice}} CNY／BTC</div>
                         </div>
                     </div>
                 </el-col>
@@ -66,16 +71,23 @@
                     <div class="grid-content">
                         <div class="content-block">
                             <div class="pay-title">付款参考号</div>
-                            <div class="pay-price">7980765</div>
+                            <div class="pay-price">{{detailData.referenceNumber}}</div>
                         </div>
-                        <div class="confirm-block">
+                        <div class="confirm-block" v-if="detailData.orderType===11">
                             <div class="confirm-tip">
                                 <span class="txt-blue">付款参考号：</span>请务必备注在付款信息中，便于收款方确认款项
                             </div>
                             <div>
-                                <el-button class="publish-btn" type="primary" @click="confirmPay()">我已付款</el-button>
-                                <el-button class="publish-btn" @click="cancelTrad()">取消交易</el-button>
-                                <el-button class="publish-btn" @click="confirmFinish()">确认放行</el-button>
+                                <el-button class="publish-btn" type="primary" @click="confirmPay()" :disabled="detailData.status!==0">我已付款</el-button>
+                                <el-button class="publish-btn" @click="cancelTrad()" :disabled="detailData.status!==0">取消交易</el-button>
+                            </div>
+                        </div>
+                        <div class="confirm-block" v-if="detailData.orderType===22">
+                            <div class="confirm-tip">
+                                <span class="txt-blue">付款参考号：</span>请务必备注在付款信息中，便于收款方确认款项
+                            </div>
+                            <div>
+                                <el-button class="publish-btn" @click="confirmFinish()" :disabled="detailData.status!==0">确认放行</el-button>
                             </div>
                         </div>
                     </div>
@@ -83,11 +95,17 @@
             </el-row>
         </div>
         <div class="trade-message">
-            <ul>
+            <ul v-if="detailData.orderType===11">
                 <li>交易提示</li>
                 <li>1、您的汇款将直接进入卖方账户，交易过程中卖方出售到数字资产由平台托管保护。</li>
                 <li>2、请在规定时间内完成付款，并务必点击“我已付款”，卖方确认收款后，系统会将数字资产划转到您的账户。</li>
                 <li>3、买卖当日连续3笔或累计6笔取消，广告方当日取消率超过30%，会限制当天到买入功能。</li>
+            </ul>
+            <ul v-if="detailData.orderType===22">
+                <li>交易提示</li>
+                <li>1、您所出售的数字资产，已交由平台托管冻结。请在确认收到对方付款后，点击 “确认放行” 支付数字资产！</li>
+                <li>2、请不要相信任何催促放币的理由，确认收到款项后再释放数字资产，避免造成损失！</li>
+                <li>3、在收到账短信后，请务必登录网上银行或手机银行确认款项是否入账，避免因收到诈骗短信错误释放数字资产！</li>
             </ul>
         </div>
       </div>
@@ -101,6 +119,25 @@ import axios from '@/axios';
 export default {
   components: {
       Navigator
+  },
+  data() {
+      return {
+          detailData: {
+              status: undefined,
+              orderType: undefined,
+          },
+      }
+  },
+  created() {
+    axios({
+            url: 'otc/otcorder/orderDetail',
+            method: 'post',
+            data: {"orderId":this.$route.params.id},
+        }).then((response) => {
+            if(response.data.status == 1){
+                this.detailData = response.data.data;
+            }
+        });
   },
   methods: {
       confirmPay: function() {

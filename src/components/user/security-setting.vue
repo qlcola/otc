@@ -3,12 +3,12 @@
     <div class="userwrap">
       <div class="avatar-wrap">
         <div class="avatar">
-          <span>a</span>
+          <span>{{ userInfo.nickName ? userInfo.nickName.substring(0, 1) : null}}</span>
         </div>
       </div>
       <div class="userinfo">
-          <p>{{userForm.nickName || userForm.email || userForm.mobile}}</p>
-          <p>UID: {{userForm.userId}}</p>
+          <p>{{userInfo.nickName || userInfo.email || userInfo.mobile}}</p>
+          <p>UID: {{userInfo.userId}}</p>
       </div>
     </div>
 
@@ -26,7 +26,7 @@
           <template v-else>
             <span class="box-title">昵称</span>
             <span class="box-name">未绑定昵称</span>
-            <span class="box-status box-unbined">未绑定</span>
+            <span class="box-status box-unbined" @click="dialogNickVisible = true">未绑定</span>
           </template>
         </div>
       </div>
@@ -52,7 +52,7 @@
           <span class="block-flag">
               <i class="triangle"></i>
           </span>
-          <template v-if="bindedName">
+          <template v-if="bindedMobile">
             <span class="box-title">手机</span>
             <span class="box-name">{{userInfo.mobile}}</span>
             <span class="box-status">已绑定</span>
@@ -68,18 +68,31 @@
 
       <FinancialPwd />
 
-
+      <el-dialog :visible.sync="dialogNickVisible" width="520px">
+        <div slot="title">
+            <span class="main-title">绑定昵称</span>
+        </div>
+        <el-form :model="nickForm" label-position="top" :rules="rules" ref="nickForm" >
+            <el-form-item label="昵称" prop="tradePassword">
+                <el-input v-model="nickForm.nick" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogNickVisible = false">取 消</el-button>
+            <el-button type="primary" @click="bindNick">确 定</el-button>
+        </div>
+    </el-dialog> 
       <el-dialog :visible.sync="dialogEmailVisible" width="520px">
         <div slot="title">
             <span class="main-title">绑定邮箱</span>
         </div>
         <el-form :model="emailForm" label-position="top" :rules="rules" ref="emailForm" >
             <el-form-item label="邮箱" prop="tradePassword">
-                <el-input type="password" v-model="emailForm.email" auto-complete="off"></el-input>
+                <el-input v-model="emailForm.email" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="邮箱验证码" prop="tradePassword">
                <el-input v-model="emailForm.code" class="input-with-select">
-                    <el-button slot="append" @click="getCode">发送验证码</el-button>
+                    <el-button slot="append" @click="getCode(emailForm.email,'email')">发送验证码</el-button>
                 </el-input>
             </el-form-item>
         </el-form>
@@ -93,18 +106,18 @@
             <span class="main-title">绑定手机</span>
         </div>
         <el-form :model="mobileForm" label-position="top" :rules="rules" ref="mobileForm">
-            <el-form-item label="邮箱" prop="tradePassword">
-                <el-input type="password" v-model="mobileForm.mobile" auto-complete="off"></el-input>
+            <el-form-item label="手机" prop="tradePassword">
+                <el-input v-model="mobileForm.mobile" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="手机验证码" prop="tradePassword">
                <el-input v-model="mobileForm.code" class="input-with-select">
-                    <el-button slot="append" @click="getCode">发送验证码</el-button>
+                    <el-button slot="append" @click="getCode(mobileForm.mobile, 'mobile')">发送验证码</el-button>
                 </el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogMobileVisible = false">取 消</el-button>
-            <el-button type="primary" @click="bindEmail">确 定</el-button>
+            <el-button type="primary" @click="bindMobile">确 定</el-button>
         </div>
     </el-dialog> 
   </div>
@@ -150,6 +163,7 @@ export default {
       return {
         dialogEmailVisible: false,
         dialogMobileVisible: false,
+        dialogNickVisible: false,
         userForm: this.user,
         rules: {
           nickName: { required: true, validator: validateNickName, trigger: 'change'},
@@ -158,6 +172,7 @@ export default {
         },
         emailForm: {},
         mobileForm: {},
+        nickForm: {},
       }
     },
     computed: {
@@ -178,22 +193,47 @@ export default {
       ...mapActions([
         'getUserInfo',
       ]),
-      getCode() {
+      getCode(account, type) {
+        const pattern = type === 'email' ? emailPattern : mobilePattern;
+        if (pattern.test(account)) {
+          axios({
+              url: 'otc/user/verCode',
+              method: 'post',
+              data: {
+                  account,
+                  scene: 103,
+              },
+          }).then((response) => {
+            this.$message({
+              message: '验证码已发送',
+              type: 'success'
+            });
+          }); 
+        } else{
+            this.$message({
+              message: '格式不正确',
+              type: 'warning'
+            });
+        }
+      },
+      bindNick() {
         axios({
-            url: 'otc/user/verCode',
-            method: 'post',
-            data: {
-                account: this.userInfo.email || this.userInfo.mobile,
-                scene: 103,
-            },
+          url: '/otc/user/bindNick',
+          method: 'post',
+          data: this.nickForm,
         }).then((response) => {
-          this.$message({
-            message: '验证码已发送',
-            type: 'success'
-          });
+          if(response.data.status == 1){
+            this.$message({
+                message: '绑定成功',
+                type: 'success'
+            });
+            this.getUserInfo();
+            this.dialogNickVisible = false;
+          }
         });
       },
       bindEmail() {
+        console.log(this.emailForm);
         axios({
           url: '/otc/user/bindEmail',
           method: 'post',
@@ -205,6 +245,7 @@ export default {
                 type: 'success'
             });
             this.getUserInfo();
+            this.dialogEmailVisible = false;
           }
         });
       },
@@ -220,6 +261,7 @@ export default {
                 type: 'success'
             });
             this.getUserInfo();
+            this.dialogMobileVisible = false;
           }
         });
       },

@@ -62,10 +62,10 @@ export default {
       return _.pick(this.userInfo, 'userId', 'surname', 'bankBranch', 'bankCardId', 'bankOpen');
     },
     alipayForm: function() {
-      return _.pick(this.userInfo, 'userId', 'surname', 'aliAccount', 'aliQRCodePath');
+      return _.pick(this.userInfo, 'userId', 'surname', 'aliAccount');
     },
     wechatForm: function() {
-      return _.pick(this.userInfo, 'userId', 'surname', 'weixinAccount', 'weixinQRCodePath');
+      return _.pick(this.userInfo, 'userId', 'surname', 'weixinAccount');
     },
   },
   methods: {
